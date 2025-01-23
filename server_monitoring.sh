@@ -1,124 +1,66 @@
-**Server Monitoring Script Overview**
+#!/bin/bash
 
-### **Introduction**
-This server monitoring script helps in tracking server health and performance effectively. Below are the key components and their purposes, formatted for better understanding and implementation.
+# सर्वर मॉनिटरिंग स्क्रिप्ट
+# दिनांक: 2025-01-23
 
----
-##Pratik's File 
-### **Key Features of the Script**
-
-#### **1. Script Purpose and Date**
-```bash
-# Server Monitoring Script
-# Date: 2025-01-23
-```
-- **Purpose:** Monitor server uptime, processes, disk usage, and network traffic.
-
-#### **2. Server Uptime**
-```bash
+# सर्वर अपटाइम को uptime.log फाइल में सेव करेंगे
 uptime > uptime.log
-```
-- **Logs server uptime** into a file named `uptime.log`.
 
-#### **3. Top 5 Processes**
-```bash
+# टॉप 5 प्रोसेसेस को top.log में स्टोर करेंगे
 top -b -n 1 | head -n 5 > top.log
-```
-- **Captures the top 5 CPU/memory-intensive processes** and saves them in `top.log`.
 
-#### **4. Disk Usage**
-```bash
+# डिस्क उपयोग का आउटपुट df.log में
 df -h > df.log
-```
-- **Generates human-readable disk usage** statistics in `df.log`.
 
-#### **5. Network Traffic**
-```bash
+# नेटवर्क ट्रैफिक पैकेट्स को netstat.log में
 netstat -s | grep -i "Packets:received" > netstat.log
-```
-- **Logs received network packets** to `netstat.log`.
 
-#### **6. Script Outputs**
-Below are the formatted commands to display the logged information.
+# अपटाइम का आउटपुट दिखाइए
+echo "-------------------------"
+echo "🕒 सर्वर अपटाइम:"
+cat uptime.log
 
-- **Server Uptime:**
-  ```bash
-  echo "-------------------------"
-  echo "🕒 Server Uptime:"
-  cat uptime.log
-  ```
+# टॉप प्रोसेसेस का आउटपुट
+echo "-------------------------"
+echo "🔥 टॉप 5 प्रोसेसेस:"
+cat top.log
 
-- **Top Processes:**
-  ```bash
-  echo "-------------------------"
-  echo "🔥 Top 5 Processes:"
-  cat top.log
-  ```
+# डिस्क उपयोग का आउटपुट
+echo "-------------------------"
+echo "💾 डिस्क उपयोग:"
+cat df.log
 
-- **Disk Usage:**
-  ```bash
-  echo "-------------------------"
-  echo "🗀 Disk Usage:"
-  cat df.log
-  ```
+# नेटवर्क ट्रैफिक का आउटपुट
+echo "-------------------------"
+echo "🌐 नेटवर्क ट्रैफिक:"
+cat netstat.log
 
-- **Network Traffic:**
-  ```bash
-  echo "-------------------------"
-  echo "🌐 Network Traffic:"
-  cat netstat.log
-  ```
+# मेमोरी उपयोग
+echo "-------------------------"
+echo "🧠 मेमोरी उपयोग:"
+free -h | awk '/^Mem/ {print "Used: " $3 " / Total: " $2}'
 
----
+# CPU जानकारी
+echo "-------------------------"
+echo "⚙️ CPU जानकारी:"
+lscpu | grep -E '^(Model name|CPU\(s\):|Thread\(s\) per core:|Core\(s\) per socket:)'
 
-### **Additional Monitoring Commands**
+# विस्तृत रनिंग प्रोसेसेस
+echo "-------------------------"
+echo "📋 विस्तृत रनिंग प्रोसेसेस:"
+ps aux --sort=-%mem | head -n 10 | awk '{print $1, $2, $3, $4, $11}'
 
-- **Memory Usage:**
-  ```bash
-  echo "-------------------------"
-  echo "🧠 Memory Usage:"
-  free -h | awk '/^Mem/ {print "Used: " $3 " / Total: " $2}'
-  ```
+# सक्रिय नेटवर्क कनेक्शन
+echo "-------------------------"
+echo "🔗 सक्रिय नेटवर्क कनेक्शन:"
+ss -tuln | head -n 10
 
-- **CPU Information:**
-  ```bash
-  echo "-------------------------"
-  echo "⚙️ CPU Information:"
-  lscpu | grep -E '^(Model name|CPU\(s\):|Thread\(s\) per core:|Core\(s\) per socket:)'
-  ```
+# डिस्क I/O स्टैट्स
+echo "-------------------------"
+echo "📊 डिस्क I/O स्टैट्स:"
+iostat -xz 1 3 | awk 'NR==4 || /Device:/ || /sda/'
 
-- **Detailed Running Processes:**
-  ```bash
-  echo "-------------------------"
-  echo "🗋 Detailed Running Processes:"
-  ps aux --sort=-%mem | head -n 10 | awk '{print $1, $2, $3, $4, $11}'
-  ```
-
-- **Active Network Connections:**
-  ```bash
-  echo "-------------------------"
-  echo "🔗 Active Network Connections:"
-  ss -tuln | head -n 10
-  ```
-
-- **Disk I/O Stats:**
-  ```bash
-  echo "-------------------------"
-  echo "📊 Disk I/O Stats:"
-  iostat -xz 1 3 | awk 'NR==4 || /Device:/ || /sda/'
-  ```
-
-- **System Logs:**
-  ```bash
-  echo "-------------------------"
-  echo "🗒 System Logs (Last 10 Lines):"
-  tail -n 10 /var/log/syslog | grep -v "kernel"
-  ```
-
----
-
-### **Conclusion**
-This script provides comprehensive server monitoring, helping you keep track of critical performance metrics in a structured and efficient manner. Use it to proactively manage and troubleshoot server performance.
-
----
-
+# सिस्टम लॉग्स
+echo "-------------------------"
+echo "📝 सिस्टम लॉग्स (अंतिम 10 लाइनें):"
+tail -n 10 /var/log/syslog | grep -v "kernel"
