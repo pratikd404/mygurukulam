@@ -1,7 +1,6 @@
 Part 1: Creating Jenkins Jobs with Job DSL
 1.Create 9 Jenkins Jobs
-2. Set Up Views
-Create views for each role and restrict jobs visibility accordingly.
+2. Set Up Views --> Create views for each role and restrict jobs visibility accordingly.
 
 Part 2: User Roles and Authorization Strategy
 1. Create Users and Assign Roles
