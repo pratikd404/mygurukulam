@@ -1,0 +1,2 @@
+inodes, /etc/passwd and /etc/shadow, Data stream, useradd and addUser diff between, umask....   learn more
+linux file system and directories, 
